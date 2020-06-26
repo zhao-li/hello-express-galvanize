@@ -32,9 +32,16 @@ let grades = [
   }
 ];
 
-
+// to test:
+// curl "localhost:3000/students/?search=Brandon"
 app.get('/students/', (req, res) => {
-  res.send(students)
+  if (req.query.search) {
+    let desired_name = req.query.search;
+    results = students.filter(student => student.name == desired_name);
+  } else {
+    results = students;
+  }
+  res.send(results);
 });
 
 app.get('/students/:studentId', (req, res) => {
