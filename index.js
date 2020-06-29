@@ -7,48 +7,34 @@ const db = require('./db');
 
 app.use(express.json());
 
-let students = [
-  {
-    id: 1,
-    name: "Brandon"
-  },
-  {
-    id: 2,
-    name: "Jeff"
-  }
-];
-
-let grades = [
-  {
-    id: 1,
-    math: "A+",
-    science: "A-",
-    "language-arts": "A"
-  },
-  {
-    id: 2,
-    math: "A-",
-    science: "A",
-    "language-arts": "A-"
-  }
-];
-
 // to test:
 // curl "localhost:3000/students/?search=Brandon"
 app.get('/students/', (req, res) => {
+  let queryString = 'SELECT * FROM students';
   if (req.query.search) {
-    let desired_name = req.query.search;
-    results = students.filter(student => student.name == desired_name);
-  } else {
-    results = students;
-  }
-  res.send(results);
+    let desiredName = req.query.search;
+    queryString = queryString + ` WHERE name = '${desiredName}';`;
+  };
+  db.query(queryString, (err, results) => {
+    if(err) {
+      //console.log(err.stack);
+    } else {
+      res.send(results.rows);
+    }
+  });
 });
 
 app.get('/students/:studentId', (req, res) => {
   const studentId = req.params.studentId;
-  const actualIndex = studentId - 1; // account for 0-indexing
-  res.send(students[actualIndex]);
+  let queryString = `SELECT * FROM students WHERE id = ${studentId}`;
+
+  db.query(queryString, (err, results) => {
+    if(err) {
+      //console.log(err.stack);
+    } else {
+      res.send(results.rows);
+    }
+  });
 });
 
 app.get('/grades/:studentId', (req, res) => {

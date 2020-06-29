@@ -32,6 +32,7 @@ x-database-base:
     - ${DATABASE_PORT}
   volumes:
     - data:/var/lib/postgresql/data
+    - ./setup.sql:/docker-entrypoint-initdb.d/setup.sql
 
 services:
   app:
