@@ -15,7 +15,24 @@ x-app-base:
     - docker/app.env
   ports:
     - ${DEFAULT_APP_PORT}
+  volumes:
+    - node_modules:${APP_DIR}/node_modules
+
+x-database-base:
+  &database-base
+  container_name: postgresql-mpt
+  image: postgres:9.4
+  env_file:
+    - database/.env
+  volumes:
+  - data:/var/lib/postgresql/data
 
 services:
   app:
     <<: *app-base
+  database:
+    <<: *database-base
+
+volumes:
+  node_modules:
+  data:
