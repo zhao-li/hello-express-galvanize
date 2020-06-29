@@ -43,3 +43,4 @@ services:
 volumes:
   node_modules:
   data:
+
