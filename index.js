@@ -2,7 +2,8 @@ const express = require('express');
 const util = require('util');
 
 const app = express();
-const port = 3000;
+const port = process.env.DEFAULT_APP_PORT;
+const db = require('./db');
 
 app.use(express.json());
 
