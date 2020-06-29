@@ -23,7 +23,6 @@ x-app-base:
 
 x-database-base:
   &database-base
-  container_name: postgresql-mpt
   image: postgres:9.4
   env_file:
     - database/.env
@@ -32,7 +31,7 @@ x-database-base:
   ports:
     - ${DATABASE_PORT}
   volumes:
-  - data:/var/lib/postgresql/data
+    - data:/var/lib/postgresql/data
 
 services:
   app:
