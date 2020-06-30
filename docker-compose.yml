@@ -13,9 +13,34 @@ x-app-base:
     - scripts/start_app.sh
   env_file:
     - docker/app.env
+    - database/.env
+  environment:
+    - DEFAULT_APP_PORT=${DEFAULT_APP_PORT}
   ports:
     - ${DEFAULT_APP_PORT}
+  volumes:
+    - node_modules:${APP_DIR}/node_modules
+
+x-database-base:
+  &database-base
+  image: postgres:9.4
+  env_file:
+    - database/.env
+  environment:
+    - DATABASE_PORT=${DATABASE_PORT}
+  ports:
+    - ${DATABASE_PORT}
+  volumes:
+    - data:/var/lib/postgresql/data
+    - ./setup.sql:/docker-entrypoint-initdb.d/setup.sql
 
 services:
   app:
     <<: *app-base
+  database:
+    <<: *database-base
+
+volumes:
+  node_modules:
+  data:
+
